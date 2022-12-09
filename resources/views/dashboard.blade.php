@@ -4,7 +4,7 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-    @if(session('login') || session('success'))
+    @if(session('login') || session('success') || session('update') || session('add') || session('take') || session('failed') || session('delete') )
     <div class="py-2">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -18,6 +18,18 @@
                     @endif
 
                     @if ($message = Session::get('update'))
+                        {{ $message }}
+                    @endif
+
+                    @if ($message = Session::get('add'))
+                        {{ $message }}
+                    @endif
+
+                    @if ($message = Session::get('take'))
+                        {{ $message }}
+                    @endif
+
+                    @if ($message = Session::get('failed'))
                         {{ $message }}
                     @endif
 
@@ -97,7 +109,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <?php $i = 1; ?>
+                    <?php $i = 0; ?>
                     <table class="table table-bordered">
                         <tr>
                             <th class="text-center">No</th>

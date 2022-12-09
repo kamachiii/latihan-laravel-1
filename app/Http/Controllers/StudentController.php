@@ -61,11 +61,48 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Student::where('id', $id)->update([
+        $request->validate([
+            'nis' =>'required',
+            'name' =>'required',
+            'rayon' =>'required',
+            'method' =>'required',
+            'money' =>'required',
+        ]);
+
+        $student = Student::where('id', $id)->first();
+
+        if($request->method == 'Add Money') {
+            $totalMoney = $student['money'] + $request->money;
+            $student->update([
+                'nis' => $request->nis,
+                'name' => $request->name,
+                'rayon' => $request->rayon,
+                'money' => $totalMoney
+            ]);
+
+            return redirect()->route('dashboard')
+                            ->with('add','Add Money Succesfully!');
+        } elseif($request->method == 'Take Money'){
+            if($student['money'] < $request->money){
+                return redirect()->route('dashboard')
+                        ->with('failed', 'Your money is not enough!');
+            } else{
+                $totalMoney = $student['money'] - $request->money;
+                $student->update([
+                    'nis' => $request->nis,
+                    'name' => $request->name,
+                    'rayon' => $request->rayon,
+                    'money' => $totalMoney
+                ]);
+
+                return redirect()->route('dashboard')
+                                ->with('take', 'Take Succesfully!');
+            }
+        }
+        $student->update([
             'nis' => $request->nis,
             'name' => $request->name,
             'rayon' => $request->rayon,
-            'money' => $request->money
         ]);
 
         return redirect()->route('dashboard')
